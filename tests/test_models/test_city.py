@@ -62,7 +62,7 @@ class TestCity_instantiation(unittest.TestCase):
         self.assertLess(cy1.updated_at, cy2.updated_at)
 
     def test_str_representation(self):
-        dt = datetime.today()
+        dt = datetime.now()
         dt_repr = repr(dt)
         cy = City()
         cy.id = "123456"
@@ -70,15 +70,15 @@ class TestCity_instantiation(unittest.TestCase):
         cystr = cy.__str__()
         self.assertIn("[City] (123456)", cystr)
         self.assertIn("'id': '123456'", cystr)
-        self.assertIn("'created_at': " + dt_repr, cystr)
-        self.assertIn("'updated_at': " + dt_repr, cystr)
+        self.assertIn(f"'created_at': {dt_repr}", cystr)
+        self.assertIn(f"'updated_at': {dt_repr}", cystr)
 
     def test_args_unused(self):
         cy = City(None)
         self.assertNotIn(None, cy.__dict__.values())
 
     def test_instantiation_with_kwargs(self):
-        dt = datetime.today()
+        dt = datetime.now()
         dt_iso = dt.isoformat()
         cy = City(id="345", created_at=dt_iso, updated_at=dt_iso)
         self.assertEqual(cy.id, "345")
@@ -94,7 +94,7 @@ class TestCity_save(unittest.TestCase):
     """Unittests for testing save method of the City class."""
 
     @classmethod
-    def setUp(self):
+    def setUp(cls):
         try:
             os.rename("file.json", "tmp")
         except IOError:
@@ -136,7 +136,7 @@ class TestCity_save(unittest.TestCase):
     def test_save_updates_file(self):
         cy = City()
         cy.save()
-        cyid = "City." + cy.id
+        cyid = f"City.{cy.id}"
         with open("file.json", "r") as f:
             self.assertIn(cyid, f.read())
 
@@ -169,7 +169,7 @@ class TestCity_to_dict(unittest.TestCase):
         self.assertEqual(str, type(cy_dict["updated_at"]))
 
     def test_to_dict_output(self):
-        dt = datetime.today()
+        dt = datetime.now()
         cy = City()
         cy.id = "123456"
         cy.created_at = cy.updated_at = dt

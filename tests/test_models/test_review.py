@@ -68,7 +68,7 @@ class TestReview_instantiation(unittest.TestCase):
         self.assertLess(rv1.updated_at, rv2.updated_at)
 
     def test_str_representation(self):
-        dt = datetime.today()
+        dt = datetime.now()
         dt_repr = repr(dt)
         rv = Review()
         rv.id = "123456"
@@ -76,15 +76,15 @@ class TestReview_instantiation(unittest.TestCase):
         rvstr = rv.__str__()
         self.assertIn("[Review] (123456)", rvstr)
         self.assertIn("'id': '123456'", rvstr)
-        self.assertIn("'created_at': " + dt_repr, rvstr)
-        self.assertIn("'updated_at': " + dt_repr, rvstr)
+        self.assertIn(f"'created_at': {dt_repr}", rvstr)
+        self.assertIn(f"'updated_at': {dt_repr}", rvstr)
 
     def test_args_unused(self):
         rv = Review(None)
         self.assertNotIn(None, rv.__dict__.values())
 
     def test_instantiation_with_kwargs(self):
-        dt = datetime.today()
+        dt = datetime.now()
         dt_iso = dt.isoformat()
         rv = Review(id="345", created_at=dt_iso, updated_at=dt_iso)
         self.assertEqual(rv.id, "345")
@@ -100,7 +100,7 @@ class TestReview_save(unittest.TestCase):
     """Unittests for testing save method of the Review class."""
 
     @classmethod
-    def setUp(self):
+    def setUp(cls):
         try:
             os.rename("file.json", "tmp")
         except IOError:
@@ -142,7 +142,7 @@ class TestReview_save(unittest.TestCase):
     def test_save_updates_file(self):
         rv = Review()
         rv.save()
-        rvid = "Review." + rv.id
+        rvid = f"Review.{rv.id}"
         with open("file.json", "r") as f:
             self.assertIn(rvid, f.read())
 
@@ -175,7 +175,7 @@ class TestReview_to_dict(unittest.TestCase):
         self.assertEqual(str, type(rv_dict["updated_at"]))
 
     def test_to_dict_output(self):
-        dt = datetime.today()
+        dt = datetime.now()
         rv = Review()
         rv.id = "123456"
         rv.created_at = rv.updated_at = dt

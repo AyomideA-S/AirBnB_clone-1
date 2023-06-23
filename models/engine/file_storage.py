@@ -40,7 +40,7 @@ class FileStorage:
 
     def new(self, obj):
         """Stores a new Object"""
-        key = "{}.{}".format(type(obj).__name__, obj.id)
+        key = f"{type(obj).__name__}.{obj.id}"
         FileStorage.__objects[key] = obj
 
     def save(self):
@@ -74,7 +74,7 @@ class FileStorage:
             # Not yet Implemented
             raise ModelNotFoundError(model)
 
-        key = model + "." + obj_id
+        key = f"{model}.{obj_id}"
         if key not in F.__objects:
             # invalid id
             # Not yet Implemented
@@ -88,7 +88,7 @@ class FileStorage:
         if model not in F.models:
             raise ModelNotFoundError(model)
 
-        key = model + "." + obj_id
+        key = f"{model}.{obj_id}"
         if key not in F.__objects:
             raise InstanceNotFoundError(obj_id, model)
 
@@ -99,11 +99,11 @@ class FileStorage:
         """Find all instances or instances of model"""
         if model and model not in FileStorage.models:
             raise ModelNotFoundError(model)
-        results = []
-        for key, val in FileStorage.__objects.items():
-            if key.startswith(model):
-                results.append(str(val))
-        return results
+        return [
+            str(val)
+            for key, val in FileStorage.__objects.items()
+            if key.startswith(model)
+        ]
 
     def update_one(self, model, iid, field, value):
         """Updates an instance"""
@@ -111,7 +111,7 @@ class FileStorage:
         if model not in F.models:
             raise ModelNotFoundError(model)
 
-        key = model + "." + iid
+        key = f"{model}.{iid}"
         if key not in F.__objects:
             raise InstanceNotFoundError(iid, model)
         if field in ("id", "updated_at", "created_at"):

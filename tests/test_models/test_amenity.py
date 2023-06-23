@@ -56,7 +56,7 @@ class TestAmenity_instantiation(unittest.TestCase):
         self.assertLess(am1.updated_at, am2.updated_at)
 
     def test_str_representation(self):
-        dt = datetime.today()
+        dt = datetime.now()
         dt_repr = repr(dt)
         am = Amenity()
         am.id = "123456"
@@ -64,8 +64,8 @@ class TestAmenity_instantiation(unittest.TestCase):
         amstr = am.__str__()
         self.assertIn("[Amenity] (123456)", amstr)
         self.assertIn("'id': '123456'", amstr)
-        self.assertIn("'created_at': " + dt_repr, amstr)
-        self.assertIn("'updated_at': " + dt_repr, amstr)
+        self.assertIn(f"'created_at': {dt_repr}", amstr)
+        self.assertIn(f"'updated_at': {dt_repr}", amstr)
 
     def test_args_unused(self):
         am = Amenity(None)
@@ -73,7 +73,7 @@ class TestAmenity_instantiation(unittest.TestCase):
 
     def test_instantiation_with_kwargs(self):
         """instantiation with kwargs test method"""
-        dt = datetime.today()
+        dt = datetime.now()
         dt_iso = dt.isoformat()
         am = Amenity(id="345", created_at=dt_iso, updated_at=dt_iso)
         self.assertEqual(am.id, "345")
@@ -89,7 +89,7 @@ class TestAmenity_save(unittest.TestCase):
     """Unittests for testing save method of the Amenity class."""
 
     @classmethod
-    def setUp(self):
+    def setUp(cls):
         try:
             os.rename("file.json", "tmp")
         except IOError:
@@ -131,7 +131,7 @@ class TestAmenity_save(unittest.TestCase):
     def test_save_updates_file(self):
         am = Amenity()
         am.save()
-        amid = "Amenity." + am.id
+        amid = f"Amenity.{am.id}"
         with open("file.json", "r") as f:
             self.assertIn(amid, f.read())
 
@@ -164,7 +164,7 @@ class TestAmenity_to_dict(unittest.TestCase):
         self.assertEqual(str, type(am_dict["updated_at"]))
 
     def test_to_dict_output(self):
-        dt = datetime.today()
+        dt = datetime.now()
         am = Amenity()
         am.id = "123456"
         am.created_at = am.updated_at = dt

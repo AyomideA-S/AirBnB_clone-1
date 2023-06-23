@@ -116,7 +116,7 @@ class TestPlace_instantiation(unittest.TestCase):
         self.assertLess(pl1.updated_at, pl2.updated_at)
 
     def test_str_representation(self):
-        dt = datetime.today()
+        dt = datetime.now()
         dt_repr = repr(dt)
         pl = Place()
         pl.id = "123456"
@@ -124,15 +124,15 @@ class TestPlace_instantiation(unittest.TestCase):
         plstr = pl.__str__()
         self.assertIn("[Place] (123456)", plstr)
         self.assertIn("'id': '123456'", plstr)
-        self.assertIn("'created_at': " + dt_repr, plstr)
-        self.assertIn("'updated_at': " + dt_repr, plstr)
+        self.assertIn(f"'created_at': {dt_repr}", plstr)
+        self.assertIn(f"'updated_at': {dt_repr}", plstr)
 
     def test_args_unused(self):
         pl = Place(None)
         self.assertNotIn(None, pl.__dict__.values())
 
     def test_instantiation_with_kwargs(self):
-        dt = datetime.today()
+        dt = datetime.now()
         dt_iso = dt.isoformat()
         pl = Place(id="345", created_at=dt_iso, updated_at=dt_iso)
         self.assertEqual(pl.id, "345")
@@ -148,7 +148,7 @@ class TestPlace_save(unittest.TestCase):
     """Unittests for testing save method of the Place class."""
 
     @classmethod
-    def setUp(self):
+    def setUp(cls):
         try:
             os.rename("file.json", "tmp")
         except IOError:
@@ -190,7 +190,7 @@ class TestPlace_save(unittest.TestCase):
     def test_save_updates_file(self):
         pl = Place()
         pl.save()
-        plid = "Place." + pl.id
+        plid = f"Place.{pl.id}"
         with open("file.json", "r") as f:
             self.assertIn(plid, f.read())
 
@@ -223,7 +223,7 @@ class TestPlace_to_dict(unittest.TestCase):
         self.assertEqual(str, type(pl_dict["updated_at"]))
 
     def test_to_dict_output(self):
-        dt = datetime.today()
+        dt = datetime.now()
         pl = Place()
         pl.id = "123456"
         pl.created_at = pl.updated_at = dt

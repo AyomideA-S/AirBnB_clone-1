@@ -54,7 +54,6 @@ class HBNBCommand(Cmd):
             temp.save()
         else:
             print("** Too many argument for create **")
-            pass
 
     def do_show(self, arg):
         """Show an Instance of Model base on its ModelName and id eg.
@@ -77,7 +76,6 @@ class HBNBCommand(Cmd):
                 print("** no instance found **")
         else:
             print("** Too many argument for show **")
-            pass
 
     def do_destroy(self, arg):
         """Deletes an Instance of Model base on its ModelName and id eg.
@@ -99,7 +97,6 @@ class HBNBCommand(Cmd):
                 print("** no instance found **")
         else:
             print("** Too many argument for destroy **")
-            pass
 
     def do_all(self, args):
         """Retrieve all instances: eg.
@@ -115,7 +112,6 @@ class HBNBCommand(Cmd):
                 print("** class doesn't exist **")
         else:
             print("** Too many argument for all **")
-            pass
 
     def do_update(self, arg):
         """Updates an instance base on its id eg
@@ -132,7 +128,7 @@ class HBNBCommand(Cmd):
             print("** value missing **")
         else:
             try:
-                storage.update_one(*args[0:4])
+                storage.update_one(*args[:4])
             except ModelNotFoundError:
                 print("** class doesn't exist **")
             except InstanceNotFoundError:
@@ -165,7 +161,6 @@ class HBNBCommand(Cmd):
             print(f"** {field} missing **")
         except Exception as e:
             print("** invalid syntax **")
-            pass
 
     def default(self, arg):
         """Override default method to handle class methods"""

@@ -62,7 +62,7 @@ class TestUser_instantiation(unittest.TestCase):
         self.assertLess(us1.updated_at, us2.updated_at)
 
     def test_str_representation(self):
-        dt = datetime.today()
+        dt = datetime.now()
         dt_repr = repr(dt)
         us = User()
         us.id = "123456"
@@ -70,15 +70,15 @@ class TestUser_instantiation(unittest.TestCase):
         usstr = us.__str__()
         self.assertIn("[User] (123456)", usstr)
         self.assertIn("'id': '123456'", usstr)
-        self.assertIn("'created_at': " + dt_repr, usstr)
-        self.assertIn("'updated_at': " + dt_repr, usstr)
+        self.assertIn(f"'created_at': {dt_repr}", usstr)
+        self.assertIn(f"'updated_at': {dt_repr}", usstr)
 
     def test_args_unused(self):
         us = User(None)
         self.assertNotIn(None, us.__dict__.values())
 
     def test_instantiation_with_kwargs(self):
-        dt = datetime.today()
+        dt = datetime.now()
         dt_iso = dt.isoformat()
         us = User(id="345", created_at=dt_iso, updated_at=dt_iso)
         self.assertEqual(us.id, "345")
@@ -94,7 +94,7 @@ class TestUser_save(unittest.TestCase):
     """Unittests for testing save method of the  class."""
 
     @classmethod
-    def setUp(self):
+    def setUp(cls):
         try:
             os.rename("file.json", "tmp")
         except IOError:
@@ -136,7 +136,7 @@ class TestUser_save(unittest.TestCase):
     def test_save_updates_file(self):
         us = User()
         us.save()
-        usid = "User." + us.id
+        usid = f"User.{us.id}"
         with open("file.json", "r") as f:
             self.assertIn(usid, f.read())
 
@@ -169,7 +169,7 @@ class TestUser_to_dict(unittest.TestCase):
         self.assertEqual(str, type(us_dict["updated_at"]))
 
     def test_to_dict_output(self):
-        dt = datetime.today()
+        dt = datetime.now()
         us = User()
         us.id = "123456"
         us.created_at = us.updated_at = dt
